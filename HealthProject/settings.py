@@ -19,7 +19,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "HealthProjecthjsagfhsaf-afhjdafh")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = False
+DEBUG = True
 
 if DEBUG==False:
     ALLOWED_HOSTS = ['healthprojectapi.herokuapp.com']

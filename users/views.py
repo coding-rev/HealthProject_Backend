@@ -113,7 +113,7 @@ class GetAllDoctorsView(APIView):
 	serializer_class = UserListSerializer
 
 	def get(self, request):
-		allDoctors = User.objects.filter(is_doctor=True)
+		allDoctors = User.objects.filter(is_doctor=True).order_by("-pk")
 		data = UserListSerializer(allDoctors, many=True)
 		return Response({
 			"status": status.HTTP_200_OK,
@@ -125,7 +125,7 @@ class GetAllPatientsView(APIView):
 	serializer_class = UserListSerializer
 
 	def get(self, request):
-		allPatients = User.objects.filter(is_patient=True)
+		allPatients = User.objects.filter(is_patient=True).order_by("-pk")
 		data = UserListSerializer(allPatients, many=True)
 		return Response({
 			"status": status.HTTP_200_OK,
