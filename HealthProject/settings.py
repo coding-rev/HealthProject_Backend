@@ -22,7 +22,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "HealthProjecthjsagfhsaf-afhjdafh")
 DEBUG = False
 
 if DEBUG==False:
-    ALLOWED_HOSTS = ['healthproject-api.herokuapp.com']
+    ALLOWED_HOSTS = ['healthprojectapi.herokuapp.com']
 
 else:
     ALLOWED_HOSTS = ['*']
