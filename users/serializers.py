@@ -26,3 +26,13 @@ class UserListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = models.User 
 		exclude = ['password', 'username']
+
+class ProfilePictureSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = models.User
+		fields = ["profile_image"]
+
+class EditUserSerializer(serializers.Serializer):
+	full_name 		= serializers.CharField(max_length=100)
+	email  			= serializers.EmailField()
+	phone 			= serializers.CharField()

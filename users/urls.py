@@ -10,5 +10,12 @@ urlpatterns=[
 
 	# users
 	path("all-doctors", views.GetAllDoctorsView.as_view(), name="all-doctors"),
-	path("all-patients", views.GetAllPatientsView.as_view(), name="all-patients")
+	path("all-patients", views.GetAllPatientsView.as_view(), name="all-patients"),
+
+	# updates
+	path('edit-profile-pic/<int:id>', views.EditProfilePicView.as_view(), name="profile-pic"),
+	path('edit/delete/user/<int:id>', views.EditUser.as_view(), name="edit-user-info"),
+
+	# Delete
+
 ]

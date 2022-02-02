@@ -84,7 +84,7 @@ class LoginView(GenericAPIView):
 		if user:
 			token = RefreshToken.for_user(user).access_token
 			serializer = UserLoginSerializer(user)
-
+			print("LOGIN SUCCESFUL")
 			data = {
 				'status': status.HTTP_200_OK,
 				'userId': user.userId,
@@ -108,6 +108,7 @@ class Logout(APIView):
 			"message":"Logged out"
 			}, status=status.HTTP_200_OK)
 
+#Doctor Views
 class GetAllDoctorsView(APIView):
 	permission_classes = [AllowAny]
 	serializer_class = UserListSerializer
@@ -120,6 +121,7 @@ class GetAllDoctorsView(APIView):
 			"data": data.data
 			}, status=status.HTTP_200_OK)
 
+# Patient Views
 class GetAllPatientsView(APIView):
 	permission_classes = [AllowAny]
 	serializer_class = UserListSerializer
@@ -131,3 +133,73 @@ class GetAllPatientsView(APIView):
 			"status": status.HTTP_200_OK,
 			"data": data.data
 			}, status=status.HTTP_200_OK)
+
+
+class EditProfilePicView(APIView):
+	permission_classes 	= [AllowAny]
+	serializer_class 	= ProfilePictureSerializer
+
+	def put(self, request, id, format=None):
+		data 	=	ProfilePictureSerializer(data=request.data)
+		data.is_valid(raise_exception=True)
+
+		try:
+			user = User.objects.get(id=id)
+			user.profile_image = request.FILES["profile_image"]
+			user.save()
+			return Response({
+				"status": status.HTTP_200_OK,
+				"message": "Profile picture updated successfully"
+			}, status=status.HTTP_200_OK)
+		except User.DoesNotExist:
+			return Response({
+				"status": status.HTTP_400_BAD_REQUEST,
+				"message": "User does not exist"
+			}, status=status.HTTP_400_BAD_REQUEST)
+		except Exception as e:
+			return Response({
+				"status": status.HTTP_500_INTERNAL_SERVER_ERROR,
+				"message": str(e)
+			}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class EditUser(APIView):
+	permission_classes 	= [AllowAny]
+	serializer_class 	= EditUserSerializer 
+
+	def put(self, request, id):
+		data 		= EditUserSerializer(data=request.data)
+		data.is_valid(raise_exception=False)
+		validated_data = data.data
+
+		try:
+			user 			= User.objects.get(id=id)
+			user.full_name 	= validated_data["full_name"]
+			user.email 		= validated_data["email"]
+			user.phone 		= validated_data["phone"]
+			user.save()
+
+			return Response({
+				"status":status.HTTP_200_OK,
+				"message":"Profile updated successfully"
+				}, status=status.HTTP_200_OK)
+
+		except Exception as e:
+			return Response({
+				"status":status.HTTP_400_BAD_REQUEST,
+				"message":str(e)
+				}, status=status.HTTP_400_BAD_REQUEST)
+
+	def delete(self, request, id):
+		try:
+			user 		= User.objects.get(id=id)
+			user.delete()
+			return Response({
+				"status":status.HTTP_200_OK,
+				"message":"User deleted successfully"
+				}, status=status.HTTP_200_OK)
+		except:
+			return Response({
+				"status":status.HTTP_404_NOT_FOUND,
+				"message":"User not found"
+				}, status=status.HTTP_404_NOT_FOUND)
